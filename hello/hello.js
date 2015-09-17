@@ -6,11 +6,13 @@ var app = express();
 
 var port_time;
 var port_rand;
+var port_location;
 
 app.get("/", function(request, response) { 
     console.log("Call received!");
     console.log("Will call \"time\" at port "+port_time)
     console.log("Will call \"rand\" at port "+port_rand)
+    console.log("Will call \"location\" at port "+port_location)
 
     async.parallel({
             time: function(callback) {
@@ -22,6 +24,11 @@ app.get("/", function(request, response) {
                 rest.get("http://localhost:"+port_rand).end(function(res) {
                     callback(null, res.body);
                 })
+            },
+            location: function(callback) {
+                rest.get("http://localhost:"+port_location).end(function(res) {
+                    callback(null, res.body);
+                })
             }
         },
         function(err, results) {
@@ -30,6 +37,7 @@ app.get("/", function(request, response) {
                     "Hello stranger!" +
                     "\n- today is " + uparse(results.time, "time") +
                     "\n- your lucky number is " + uparse(results.rand, "number") +
+                    "\n- your location is " + uparse(results.location, "location") +
                     "\n");
                 response.send();        
             } else {
@@ -51,6 +59,10 @@ setInterval(function() {
 
     rest.get("http://localhost:3000/rand/").end(function(res) {
         port_rand = res.body.port;
+    });
+
+    rest.get("http://localhost:3000/location/").end(function(res) {
+        port_location = res.body.port;
     });
 }, 2500);
 

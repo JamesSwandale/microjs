@@ -1,0 +1,12 @@
+{
+  "name": "node-microservice-full",
+  "author": "James Swandale",
+  "private": true,
+  "dependencies": {
+    "express": "^4.13.3",
+    "unirest": "^0.4.2",
+    "async": "^1.4.2",
+    "prettyjson": "^1.1.3",
+    "request": "^2.61.0"
+  }
+}
