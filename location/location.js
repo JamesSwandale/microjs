@@ -9,14 +9,31 @@ app.get("/ping", function(request, response) { 
     response.send("pong\n");        
 });
 
-app.get("/", function(request, response) {  
-    var loc = rest.get("http://ip-api.com/json").end(function(){
-	    response.json({
-	        location: loc.response.body.city
-	    });
+
+var ipToInt = function(ipString){
+    var str = ipString.toString()
+    str = str.split(".")
+    console.log(str)
+    var value = (str[0]*Math.pow(256, 3)+(str[1]*Math.pow(256, 2))+(str[2]*256)+str[3]) 
+    return value
+}
+
+app.get('/location/:ip?', function(request, response) {
+    var ipAddress = ""
+    if (request.params.ip != null)
+        ipAddress = request.params.ip
+    var loc = rest.get("http://ip-api.com/json/" + ipAddress).end(function(){
+        var locationData = { 'country': {
+            'language': loc.response.body.region + 'lish',
+            'name': loc.response.body.country,
+            'geoname_id': ipToInt(loc.response.body.query),
+            'iso_code': loc.response.body.countryCode
+        },
+        'host': loc.response.body.query
+    };
+    response.json(locationData);
     });
 });
-                                          
 
 app.listen(port, function() {                       
     console.log("Locations service started on port "+port);
