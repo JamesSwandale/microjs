@@ -13,7 +13,6 @@ app.get("/ping", function(request, response) { 
 var ipToInt = function(ipString){
     var str = ipString.toString()
     str = str.split(".")
-    console.log(str)
     var value = (str[0]*Math.pow(256, 3)+(str[1]*Math.pow(256, 2))+(str[2]*256)+str[3]) 
     return value
 }
