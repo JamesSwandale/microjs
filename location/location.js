@@ -3,8 +3,6 @@ var rest = require('unirest');
 var app = express();  
 var colors = require('colors');
 var port = (process.argv.length > 2) ? parseInt(process.argv[2],10) : 3400
-var MMDBReader = require('mmdb-reader');
-var ipify = require('ipify');
 
 app.get("/ping", function(request, response) { 
 	console.log("ping received :)".yellow)
@@ -14,7 +12,7 @@ app.get("/ping", function(request, response) { 
 var ipToInt = function(ipString){
     var str = ipString.toString()
     str = str.split(".")
-    var value = (str[0]*Math.pow(256, 3)+(str[1]*Math.pow(256, 2))+(str[2]*256)+str[3]) 
+    var value = (str[0]*Math.pow(255, 3)+(str[1]*Math.pow(255, 2))+(str[2]*255)+str[3]) 
     return value
 }
 app.get('/location/:ip?', function(request, response) {
