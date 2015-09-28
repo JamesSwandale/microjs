@@ -21,34 +21,40 @@ describe('Endpoints test', function() {
 
 	describe("When checking specific ip addresses", function (done){
 		it('the correct information should be returned', function (done) {
-			var dbExpected = { 'country': {
-					'language': 'en',
-					'name': 'United Kingdom',
-					'geoname_id': 2635167,
-					'iso_code': 'GB'
-				},
-			   'host': '82.211.87.195'
-			};
-			var ipExpected = { 'country': {
-					'language': "ENGlish",
-					'name': 'United Kingdom',
-					'geoname_id': "1389582080195",
-					'iso_code': 'GB'
-				},
-			   'host': '82.211.87.195'
-			};
-			 
-			 
-
+			var key = process.env.KEY 
+			var expected
+			if (key == "DB"){
+				console.log("db")
+				expected = { 'country': {
+						'language': 'en',
+						'name': 'United Kingdom',
+						'geoname_id': 2635167,
+						'iso_code': 'GB'
+					},
+				   'host': '82.211.87.195'
+				};
+			}else{
+				expected = { 'country': {
+						'language': "ENGlish",
+						'name': 'United Kingdom',
+						'geoname_id': "1373415210195",
+						'iso_code': 'GB'
+					},
+				   'host': '82.211.87.195'
+				};
+			}
 			request(app)
 				.get('/location/82.211.87.195')
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end(function(err, res) {
-					assert.deepEqual( res.body, ipExpected);
+					assert.deepEqual( res.body, expected);
 					done();
 				})
 		});
+	})
+});
+
 		/*
 		it("private ip address will return error information", function (done) {
 	    	var expected = {
@@ -66,5 +72,3 @@ describe('Endpoints test', function() {
 				})
 	    });	
 	    */	
-	})
-});
