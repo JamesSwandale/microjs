@@ -4,7 +4,6 @@ var app = express();  
 var colors = require('colors');
 var port = (process.argv.length > 2) ? parseInt(process.argv[2],10) : 3400
 var MMDBReader = require('mmdb-reader');
-var ipify = require('ipify');
 
 app.get("/ping", function(request, response) { 
 	console.log("ping received :)".yellow)
@@ -12,15 +11,9 @@ app.get("/ping", function(request, response) { 
 });
 
 app.get('/location/:ip?', function(request, response) {
-	var ipAddress = ""
-	if (request.params.ip != undefined){
-		ipAddress = request.params.ip		
-	}
+	var ipAddress = request.params.ip		
 
 	var loc = MMDBReader.open('../geolite-db/GeoLite2-Country.mmdb', function(err, reader){
-		if(err){
-		 console.log("blow up") 
-		}
 		var locResponse = reader.lookup(ipAddress);
 		var locationData = { 
 			'country': {
