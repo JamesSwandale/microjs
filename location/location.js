@@ -1,14 +1,15 @@
 var express = require("express");
 var rest = require('unirest');
 var app = express();  
-
+var colors = require('colors');
 var port = (process.argv.length > 2) ? parseInt(process.argv[2],10) : 3400
+var MMDBReader = require('mmdb-reader');
+var ipify = require('ipify');
 
 app.get("/ping", function(request, response) { 
-    console.log("ping received :)")
-    response.send("pong\n");        
+	console.log("ping received :)".yellow)
+	response.send("pong\n".yellow);        
 });
-
 
 var ipToInt = function(ipString){
     var str = ipString.toString()
@@ -16,7 +17,6 @@ var ipToInt = function(ipString){
     var value = (str[0]*Math.pow(256, 3)+(str[1]*Math.pow(256, 2))+(str[2]*256)+str[3]) 
     return value
 }
-
 app.get('/location/:ip?', function(request, response) {
     var ipAddress = ""
     if (request.params.ip != null)
@@ -35,10 +35,10 @@ app.get('/location/:ip?', function(request, response) {
 });
 
 app.listen(port, function() {                       
-    console.log("Locations service started on port "+port);
+	console.log(colors.yellow("Locations service started on port %s"), port);
 });
 
 
 setInterval(function() {
-    rest.post("http://localhost:3000/location/"+port).end();
+	rest.post("http://localhost:3000/location/"+port).end();
 }, 5000);
